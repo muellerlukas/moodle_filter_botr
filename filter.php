@@ -36,11 +36,11 @@ class filter_botr extends moodle_text_filter {
 
     function filter($text, array $options = array()) {
 
-		// non string data can not be filtered anyway
+        // non string data can not be filtered anyway
         if (!is_string($text) or empty($text)) {
             return $text;
         }
-		
+        
         if (stripos($text, '[botr ' ) === false) {
             // performance shortcut - all regexes below contain botr.actxc tag,
             // if not present nothing can match
@@ -48,17 +48,17 @@ class filter_botr extends moodle_text_filter {
         }
 
         $newtext = $text; // we need to return the original value if regex fails!
-		
+        
         $search = '#(\[botr ([0-9a-z]{8})(?:[-_])?([0-9a-z]{8})?\])#is';
-		
-		// replace with video-player
+        
+        // replace with video-player
         $newtext = preg_replace_callback($search, 'botr_create_js_embed', $newtext);
 
         if (empty($newtext) or $newtext === $text) {
             // error or not filtered
             unset($newtext);
            
-		   // return original text
+           // return original text
            return $text;
         }
 
@@ -97,8 +97,8 @@ function botr_create_js_embed($arguments) {
         $signature = md5("$path:$expires:$api_secret");
         $url = "https://"."$content_mask/$path?exp=$expires&sig=$signature";
     }
-	
-	// final player
+    
+    // final player
     return "<script type='text/javascript' src='$url'></script>";
 }
 ?>
